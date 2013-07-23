@@ -1,3 +1,7 @@
+# Clone this repository
+# cd kafka-debian
+# ./build.sh VERSION REVISION
+
 ```
 An Ubuntu/Debian packaging script for Apache Kafka
 
