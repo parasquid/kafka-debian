@@ -5,10 +5,10 @@ REVISION=$2
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BUILD_DIR="kafka_$VERSION-$REVISION"
-KAFKA_DIR="$BUILD_DIR/opt/kafka"
-TARFILE="kafka-$VERSION-incubating-src.tgz"
+KAFKA_DIR="$BUILD_DIR/etc/kafka"
+TARFILE="kafka-$VERSION-src.tgz"
 CONTROL_FILE="$BUILD_DIR/DEBIAN/control"
-URL="http://mirrors.ibiblio.org/apache/incubator/kafka/kafka-$VERSION-incubating/$TARFILE"
+URL="http://mirror.reverse.net/pub/apache/kafka/$VERSION/kafka-$VERSION-src.tgz"
 
 
 function help {
@@ -66,6 +66,7 @@ tar -zxf $TARFILE --strip 1 -C $KAFKA_DIR
 cd $KAFKA_DIR
 ./sbt update
 ./sbt package
+./sbt assembly-package-dependency
 
 cd $DIR
 sed -i "s/\$VERSION/$VERSION/g" $CONTROL_FILE
