@@ -1,0 +1,98 @@
+#! /bin/sh
+# /etc/init.d/kafka: start the kafka daemon.
+
+# chkconfig: 345 80 20
+# description: kafka
+
+PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/etc/kafka/bin
+
+prog=kafka
+DESC="kafka daemon"
+
+RETVAL=0
+
+echo_success() {
+  echo ok
+}
+echo_failure() {
+  echo failed
+}
+
+start() {
+  ulimit -n 65536
+  ulimit -s 10240
+  ulimit -c unlimited
+  echo -n $"Starting $prog: "
+  nohup ./bin/kafka-server-start.sh ./config/server.properties >> /var/log/kafka.log 2>&1 &
+  RETVAL=$?
+  [ $RETVAL -eq 0 ] && echo_success
+  [ $RETVAL -ne 0 ] && echo_failure
+  echo
+  return $RETVAL
+}
+
+stop() {
+  echo $"Stopping $prog: "
+  for pgid in `ps ax -o  "pid pgid args" | \grep .[/]bin/kafka-server-start.sh | awk '{print $2}'`; do
+    for pid in `ps ax -o  "pid pgid args" | \grep -E $"[0-9]+ +$pgid +" | \grep java | awk '{print $1}'`; do
+      echo -n $"Stopping $prog($pid): "
+      kill $pid
+      RETVAL=$?
+      c=50
+      while [ $c -gt 0 ]; do
+        let c=$c-1
+        flag=1
+        for p in `ps ax -o  "pid pgid args" | \grep -E $"[0-9]+ +$pgid +"`; do
+          flag=0
+          break
+        done
+        if [ $flag -ne 0 ]; then
+          break
+        fi
+        sleep .1
+      done
+      if [ $c -le 0 ]; then
+        RETVAL=1
+      fi
+    done
+  done
+  [ $RETVAL -eq 0 ] && echo_success
+  [ $RETVAL -ne 0 ] && echo_failure
+    echo
+  return $RETVAL
+}
+
+reload() {
+  stop
+  start
+}
+
+restart() {
+  stop
+  start
+}
+
+case "$1" in
+start)
+  start
+  ;;
+
+stop)
+  stop
+  ;;
+
+reload)
+  reload
+  ;;
+
+restart)
+  restart
+  ;;
+
+*)
+  echo $"Usage: $0 {start|stop|reload|restart}"
+  exit 1
+esac
+
+exit $?
+
