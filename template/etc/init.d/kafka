@@ -18,7 +18,7 @@ start() {
   ulimit -c unlimited
   cd $KAFKA_DIR
   echo -n $"Starting $prog: "
-  nohup kafka-server-start.sh ./config/server.properties >> /var/log/kafka.log 2>&1 &
+  nohup kafka-server-start.sh ./config/server.properties >> /var/log/kafka/kafka.log 2>&1 &
   RETVAL=$?
   [ $RETVAL -eq 0 ] && echo "Kafka started"
   [ $RETVAL -ne 0 ] && echo "Kafka failed to start"
