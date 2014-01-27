@@ -6,9 +6,9 @@ REVISION=$2
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BUILD_DIR="kafka_$VERSION-$REVISION"
 KAFKA_DIR="$BUILD_DIR/opt/kafka"
-TARFILE="kafka-$VERSION-incubating-src.tgz"
+TARFILE="kafka-$VERSION-src.tgz"
 CONTROL_FILE="$BUILD_DIR/DEBIAN/control"
-URL="http://mirrors.ibiblio.org/apache/incubator/kafka/kafka-$VERSION-incubating/$TARFILE"
+URL="http://mirrors.ibiblio.org/apache/kafka/$VERSION/$TARFILE"
 
 
 function help {
@@ -17,7 +17,7 @@ function help {
     echo ""
     echo "USAGE: $0 VERSION REVISION"
     echo ""
-    echo "$0 0.7.2 1"
+    echo "$0 0.8.0 1"
     echo ""
     echo "VERSION: the Kafka release version (eg: 0.7.2)"
     echo "REVISION: the revision number to use when generating the .deb (eg: 1)"
