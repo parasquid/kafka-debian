@@ -18,7 +18,7 @@ function help {
     echo "USAGE: $0 VERSION REVISION"
     echo ""
     echo "$0 0.8.0 1"
-    echo ""
+    echo " "
     echo "VERSION: the Kafka release version (eg: 0.7.2)"
     echo "REVISION: the revision number to use when generating the .deb (eg: 1)"
     echo ""
