@@ -26,13 +26,13 @@ function help {
 
 
 if [ -z "$VERSION" ] || [ "${VERSION}xxx" = "xxx" ]
-then 
+then
     help
     exit 1
 fi
 
 if [ -z "$REVISION" ] || [ "${REVISION}xxx" = "xxx" ]
-then 
+then
     help
     exit 1
 fi
@@ -66,6 +66,7 @@ tar -zxf $TARFILE --strip 1 -C $KAFKA_DIR
 cd $KAFKA_DIR
 ./sbt update
 ./sbt package
+./sbt assembly-package-dependency
 
 cd $DIR
 sed -i "s/\$VERSION/$VERSION/g" $CONTROL_FILE
